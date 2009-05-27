@@ -1,0 +1,50 @@
+TreeSelect
+==========
+
+This plugin adds a few new methods to form-option helpers;
+
+
+options_from_tree_collection_for_select(collection, value_method, text_method, selected = nil)
+
+This method works like the options_from_collection_for_select, however, it recurses through the childelements, indenting them with characters on the left;
+
+level 1
+----- level 1 1
+----- level 1 2
+
+
+tree_select(method, collection, value_method, text_method, options = {}, html_options = {})
+
+This method allows you to put a tree_select tag in your forms.
+
+
+Example
+=======
+
+Create an acts_as_tree model, e.g;
+
+class Category < ActiveRecord::Base
+  acts_as_tree
+end
+
+Create another class that should link somewhere to the tree, e.g.;
+
+class Item < ActiveRecord::Base
+  validates_presence_of :category_id, :name
+end
+
+Change your form;
+
+<% form_for(@item) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :category_id %><br />
+    <%= f.tree_select :category_id, Category.roots, :id, :name, :include_blank => true %>
+  </p>
+...
+<% end %>
+
+Install
+=======
+./script/plugin install git://github.com/stijnster/tree_select.git
